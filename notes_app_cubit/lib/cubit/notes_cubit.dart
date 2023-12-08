@@ -25,18 +25,25 @@ class AddNotesCubit extends Cubit<NotesState> {
     }
   }
 
-  void saveEditedNotes(index) {
-    // print("444444 ${notes[index].title}");
-    notes[index].title = titleC.text;
-    notes[index].detail = detailC.text;
-    emit(NotesState(notes: notes));
-    titleC.clear();
-    detailC.clear();
-  }
-
   void delete(int index) {
     notes.removeAt(index);
     emit(NotesState(notes: notes));
+  }
+
+  void saveEditedNotes(int index) {
+    if (titleC.text.isEmpty) {
+      titleC.text = notes[index].title!;
+      detailC.text = notes[index].detail!;
+    } else if (detailC.text.isEmpty) {
+      titleC.text = notes[index].title!;
+      detailC.text = notes[index].detail!;
+    } else {
+      notes[index].title = titleC.text;
+      notes[index].detail = detailC.text;
+      emit(NotesState(notes: notes));
+    }
+    titleC.clear();
+    detailC.clear();
   }
 
   String? titleValidator(String? value) {

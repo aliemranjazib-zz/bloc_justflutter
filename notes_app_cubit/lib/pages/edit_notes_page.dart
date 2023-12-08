@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/notes_cubit.dart';
 
-class AddNotesPage extends StatelessWidget {
-  const AddNotesPage({super.key});
+class EditNotesPage extends StatelessWidget {
+  final int index;
+  const EditNotesPage({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
-    final addNotesCubit = BlocProvider.of<AddNotesCubit>(context);
+    final editNotesCubit = BlocProvider.of<AddNotesCubit>(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(),
@@ -16,39 +17,39 @@ class AddNotesPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Form(
-            key: addNotesCubit.formKey,
+            key: editNotesCubit.formKey,
             child: Column(
               children: [
                 const Text(
-                  "ENTER YOUR\nNOTE",
+                  "EDIT YOUR\nNOTE",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 40, color: Colors.deepPurple),
                 ),
                 const SizedBox(height: 40),
                 TextFormField(
-                  controller: addNotesCubit.titleC,
-                  validator: addNotesCubit.titleValidator,
-                  decoration: const InputDecoration(
-                    hintText: 'enter title',
-                    border: OutlineInputBorder(),
+                  controller: editNotesCubit.titleC,
+                  validator: editNotesCubit.titleValidator,
+                  decoration: InputDecoration(
+                    hintText: editNotesCubit.notes[index].title,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: addNotesCubit.detailC,
-                  validator: addNotesCubit.detailValidator,
+                  controller: editNotesCubit.detailC,
+                  validator: editNotesCubit.detailValidator,
                   maxLines: 4,
                   minLines: 4,
-                  decoration: const InputDecoration(
-                    hintText: 'enter detail',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: editNotesCubit.notes[index].detail,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 40),
                 MaterialButton(
                   color: Colors.amber,
                   onPressed: () {
-                    addNotesCubit.submit();
+                    editNotesCubit.saveEditedNotes(index);
                     Navigator.pop(context);
                   },
                   minWidth: double.infinity,
